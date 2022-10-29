@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "setup-db": "node src/setup.mjs"
+    "setup-db": "node src/setup.mjs",
+    "mark-lemma": "node src/mark-lemma.mjs",
+    "update-verses": "node src/update-verses.mjs"
   },
   "author": "",
   "license": "ISC",

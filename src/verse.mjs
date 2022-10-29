@@ -9,8 +9,10 @@ const VerseSchema = new Schema({
 		_id: false,
 		text: String,
 		morph: String,
-		lemma: String
-	}]
+		lemma: String,
+		known: Boolean
+	}],
+	knownPercent: Number
 })
 
 export default model('Verse', VerseSchema)
