@@ -1,0 +1,16 @@
+{
+  "name": "tanakh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "setup-db": "node src/setup.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "16.0.3",
+    "fast-xml-parser": "4.0.11",
+    "mongoose": "6.7.0"
+  }
+}
