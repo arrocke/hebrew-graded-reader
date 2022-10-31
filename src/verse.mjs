@@ -12,7 +12,8 @@ const VerseSchema = new Schema({
 		lemma: String,
 		known: Boolean
 	}],
-	knownPercent: Number
+	knownPercent: Number,
+	hasRead: Boolean
 })
 
 export default model('Verse', VerseSchema)

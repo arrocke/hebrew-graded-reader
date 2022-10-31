@@ -6,6 +6,7 @@
   "scripts": {
     "setup-db": "node src/setup.mjs",
     "mark-lemma": "node src/mark-lemma.mjs",
+    "mark-verse": "node src/mark-verse.mjs",
     "update-verses": "node src/update-verses.mjs"
   },
   "author": "",
