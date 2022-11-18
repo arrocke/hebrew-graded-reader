@@ -2,7 +2,6 @@ import { model, Schema } from 'mongoose'
 
 const VerseSchema = new Schema({
 	bookName: String,
-	bookOrder: Number,
 	chapterNumber: Number,
 	verseNumber: Number,
 	elements: [{
@@ -12,6 +11,7 @@ const VerseSchema = new Schema({
 		lemma: String,
 		known: Boolean
 	}],
+	unknownLemmas: [String],
 	knownPercent: Number,
 	hasRead: Boolean
 })

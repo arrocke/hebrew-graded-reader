@@ -12,6 +12,7 @@ mongoose.connect(process.env.MONGODB_URI).then(async () => {
 
 	for await (let verse of cursor) {
 		const words = verse.elements.filter(element => element.lemma)
+		const unknownLemmas = new Set()
 		const knownElements = words.filter(element => {
 			const morphElements = element.morph.split('/')
 			const lemmaElements = element.lemma.split('/')
@@ -22,6 +23,7 @@ mongoose.connect(process.env.MONGODB_URI).then(async () => {
 					const isKnownVocab = lemmas.includes(lemma)
 					const isNonVerb = !morph.includes('V')
 					const isKnownVerbForm = verbForms.some(form => morph.includes(form))
+					if (!isKnownVocab) unknownLemmas.add(lemma)
 					return isKnownVocab && (isNonVerb || isKnownVerbForm)
 				} catch (error) {
 					console.log(verse.bookName, verse.chapterNumber, verse.verseNumber, element)
@@ -31,6 +33,7 @@ mongoose.connect(process.env.MONGODB_URI).then(async () => {
 			return element.known
 		})
 		verse.knownPercent = knownElements.length / words.length
+		verse.unknownLemmas = Array.from(unknownLemmas)
 		await verse.save()
 	}
 

@@ -8,9 +8,9 @@ const verses = process.argv.slice(3)
 
 mongoose.connect(process.env.MONGODB_URI).then(async () => {
 	for (const verse of verses) {
-		const book = verse.split(' ')[0]
-		const chapterN = parseInt(verse.split(' ')[1].split(':')[0])
-		const verseN = parseInt(verse.split(' ')[1].split(':')[1])
+		const book = verse.split(' ').slice(0, -1).join(' ')
+		const chapterN = parseInt(verse.split(' ').slice(-1)[0].split(':')[0])
+		const verseN = parseInt(verse.split(' ').slice(-1)[0].split(':')[1])
 		const v = await Verse.findOne({ bookName: book, chapterNumber: chapterN, verseNumber: verseN })
 
 		if (mark === 'read') {
