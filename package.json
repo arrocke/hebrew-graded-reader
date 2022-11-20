@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "setup-db": "node src/setup.mjs",
-    "mark-lemma": "node src/mark-lemma.mjs",
-    "mark-verse": "node src/mark-verse.mjs",
-    "update-verses": "node src/update-verses.mjs"
+    "setup-db": "node src/scripts/setup.mjs",
+    "mark-lemma": "node src/scripts/mark-lemma.mjs",
+    "mark-verse": "node src/scripts/mark-verse.mjs",
+    "update-verses": "node src/scripts/update-verses.mjs"
   },
   "author": "",
   "license": "ISC",

@@ -2,8 +2,8 @@ import 'dotenv/config'
 import { XMLParser } from 'fast-xml-parser'
 import fs from 'fs/promises'
 import mongoose from 'mongoose'
-import Verse from './verse.mjs'
-
+import Verse from '../models/verse.mjs'
+import Lemma from '../models/lemma.mjs'
 
 const parser = new XMLParser({
 	preserveOrder: true,
@@ -53,6 +53,7 @@ const bookMap = [
 ]
 
 async function loadData() {
+	const lemmas = new Set()
 	for (const order in bookMap) {
 		const { file, name } = bookMap[order]
 		console.log(name)
@@ -74,6 +75,7 @@ async function loadData() {
 							const text = element.w[0]['#text']
 							const lemma = element[':@']['@_lemma']
 							const morph = element[':@']['@_morph']
+							lemma.split('/').forEach(l => lemmas.add(l))
 							return { text, lemma, morph }
 						}
 						case 'seg': {
@@ -98,6 +100,7 @@ async function loadData() {
 			}
 		}
 	}
+	await Lemma.create(...lemmas.map(l => ({ id: l })))
 }
 
 mongoose.connect(process.env.MONGODB_URI).then(async () => {

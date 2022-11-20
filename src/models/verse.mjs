@@ -13,7 +13,8 @@ const VerseSchema = new Schema({
 	}],
 	unknownLemmas: [String],
 	knownPercent: Number,
-	hasRead: Boolean
+	hasRead: Boolean,
+	awbLesson: Number
 })
 
 export default model('Verse', VerseSchema)

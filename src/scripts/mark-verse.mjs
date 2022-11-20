@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import mongoose from 'mongoose'
-import Verse from './verse.mjs'
-import Lemma from './lemma.mjs'
+import Verse from '../models/verse.mjs'
+import Lemma from '../models/lemma.mjs'
 
 const mark = process.argv[2]
 const verses = process.argv.slice(3)

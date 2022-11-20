@@ -1,11 +1,11 @@
 import 'dotenv/config'
 import mongoose from 'mongoose'
-import Lemma from './lemma.mjs'
-import VerbStem from './verb-stem.mjs'
-import Verse from './verse.mjs'
+import Lemma from '../models/lemma.mjs'
+import VerbStem from '../models/verb-stem.mjs'
+import Verse from '../models/verse.mjs'
 
 mongoose.connect(process.env.MONGODB_URI).then(async () => {
-	const lemmas = (await Lemma.find({ known: true }, { id: true }).lean()).map(lemma => lemma.id)
+	const lemmas = (await Lemma.find({}, { id: true, awbLesson: true, known: true }).lean())
 	const verbForms = (await VerbStem.find({}).lean()).flatMap(stem => stem.conjugations.map(c => `V${stem.stem}${c}`))
 
 	const cursor = Verse.find().cursor()
@@ -13,6 +13,8 @@ mongoose.connect(process.env.MONGODB_URI).then(async () => {
 	for await (let verse of cursor) {
 		const words = verse.elements.filter(element => element.lemma)
 		const unknownLemmas = new Set()
+		const awbLessons = []
+
 		const knownElements = words.filter(element => {
 			const morphElements = element.morph.split('/')
 			const lemmaElements = element.lemma.split('/')
@@ -20,7 +22,9 @@ mongoose.connect(process.env.MONGODB_URI).then(async () => {
 			element.known = lemmaElements.every((lemma, i) => {
 				try {
 					const morph = morphElements[i]
-					const isKnownVocab = lemmas.includes(lemma)
+					const lemmaData = lemmas.find(l => l.id === lemma)
+					awbLessons.push(lemmaData?.awbLesson)
+					const isKnownVocab = lemmaData?.known ?? false
 					const isNonVerb = !morph.includes('V')
 					const isKnownVerbForm = verbForms.some(form => morph.includes(form))
 					if (!isKnownVocab) unknownLemmas.add(lemma)
@@ -34,6 +38,11 @@ mongoose.connect(process.env.MONGODB_URI).then(async () => {
 		})
 		verse.knownPercent = knownElements.length / words.length
 		verse.unknownLemmas = Array.from(unknownLemmas)
+		if (awbLessons.every(lesson => typeof lesson === 'number')) {
+			verse.awbLesson = awbLessons.reduce((max, lesson) => Math.max(max, lesson), 0)
+		} else {
+			verse.awbLesson = undefined
+		}
 		await verse.save()
 	}
 

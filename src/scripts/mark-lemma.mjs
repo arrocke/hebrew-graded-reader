@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import mongoose from 'mongoose'
-import Lemma from './lemma.mjs'
+import Lemma from '../models/lemma.mjs'
 
 const lemmaIds = process.argv.slice(2)
 
