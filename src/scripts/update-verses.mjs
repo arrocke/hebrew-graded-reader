@@ -1,12 +1,19 @@
 import 'dotenv/config'
 import mongoose from 'mongoose'
 import Lemma from '../models/lemma.mjs'
-import VerbStem from '../models/verb-stem.mjs'
 import Verse from '../models/verse.mjs'
+
+const conjugations = [{
+	stem: 'q',
+	conjugations: [ "p", "q", "i", "w", "v", "r", "h", "c" ]
+},{
+	stem: 'p',
+	conjugations: [ "p", "q", "i", "w" ]
+}]
 
 mongoose.connect(process.env.MONGODB_URI).then(async () => {
 	const lemmas = (await Lemma.find({}, { id: true, awbLesson: true, known: true }).lean())
-	const verbForms = (await VerbStem.find({}).lean()).flatMap(stem => stem.conjugations.map(c => `V${stem.stem}${c}`))
+	const verbForms = conjugations.flatMap(stem => stem.conjugations.map(c => `V${stem.stem}${c}`))
 
 	const cursor = Verse.find().cursor()
 

@@ -57,7 +57,7 @@ async function loadData() {
 	for (const order in bookMap) {
 		const { file, name } = bookMap[order]
 		console.log(name)
-		const data = await fs.readFile(`./data/${file}`)
+		const data = await fs.readFile(`./data/wlc/${file}`)
 		const json = parser.parse(data)
 		const book = json[1].osis[0].osisText[1]
 
