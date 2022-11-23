@@ -1,0 +1,33 @@
+[{
+ $match: {
+  awbLesson: {
+   $exists: true
+  }
+ }
+}, {
+ $group: {
+  _id: '$awbLesson',
+  count: {
+   $sum: 1
+  },
+  verses: {
+   $push: {
+    $concat: [
+     '$bookName',
+     ' ',
+     {
+      $toString: '$chapterNumber'
+     },
+     ':',
+     {
+      $toString: '$verseNumber'
+     }
+    ]
+   }
+  }
+ }
+}, {
+ $sort: {
+  _id: 1
+ }
+}]

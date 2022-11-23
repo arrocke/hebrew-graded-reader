@@ -1,0 +1,8 @@
+[{
+ $match: {
+  hasRead: {
+   $ne: true
+  },
+  knownPercent: 1
+ }
+}]

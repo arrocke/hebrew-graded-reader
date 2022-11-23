@@ -1,0 +1,30 @@
+[{
+ $match: {
+  hasRead: {
+   $ne: true
+  },
+  unknownLemmas: {
+   $size: 1
+  }
+ }
+}, {
+ $addFields: {
+  unknownElement: {
+   $first: '$unknownLemmas'
+  }
+ }
+}, {
+ $group: {
+  _id: '$unknownElement',
+  count: {
+   $sum: 1
+  },
+  verses: {
+   $push: '$$ROOT'
+  }
+ }
+}, {
+ $sort: {
+  count: -1
+ }
+}]
